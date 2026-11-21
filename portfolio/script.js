@@ -8,6 +8,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
     // ---------- Visitor's local time (developer.js card) ----------
+    // ---------- Light / dark mode ----------
+  const themeBtn = document.getElementById("theme-toggle");
+  const root = document.documentElement;
+
+  const applyTheme = (theme) => {
+    root.setAttribute("data-theme", theme);
+    if (themeBtn) {
+      const isDark = theme === "dark";
+      themeBtn.querySelector(".theme-icon").textContent = isDark ? "☀️" : "🌙";
+      themeBtn.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    }
+  };
+
+  applyTheme(root.getAttribute("data-theme") || "light");
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+  }
+
+  // Follow system changes only if the visitor hasn't chosen manually
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch (err) {}
+    if (!saved) applyTheme(e.matches ? "dark" : "light");
+  });
   const timeEl = document.getElementById("local-time");
   if (timeEl) {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
