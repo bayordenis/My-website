@@ -552,3 +552,21 @@ body {
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .js .reveal { opacity: 1; transform: none; }
 }
+
+/* Light mode via inversion — assumes the site's default look is dark */
+html[data-theme="light"] {
+  background: #fff;
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html[data-theme="light"] img,
+html[data-theme="light"] video,
+html[data-theme="light"] .code-window {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html { transition: filter 0.3s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { transition: none; }
+}
