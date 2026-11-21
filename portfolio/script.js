@@ -7,6 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------- Footer year ----------
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+    // ---------- Visitor's local time (developer.js card) ----------
+  const timeEl = document.getElementById("local-time");
+  if (timeEl) {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    const timeFormat = new Intl.DateTimeFormat([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+    const tick = () => {
+      timeEl.textContent = timeFormat.format(new Date()) + (tz ? ` (${tz})` : "");
+    };
+    tick();
+    setInterval(tick, 1000);
+  }
 
     // ---------- Hero headline animation ----------
   const heroTitle = document.querySelector(".hero h1");
